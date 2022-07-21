@@ -15,13 +15,10 @@ class Solution {
         
         if(left==right) return head;
         
-        ListNode dummy = new ListNode(-1);
-        dummy.next = head;
         ListNode prevIt = null;
+        ListNode it = head;
         
-        ListNode it = dummy;
-        
-        for(int i=0; i<left; i++){
+        for(int i=0; i<left-1; i++){
             prevIt = it;
             it = it.next;
         }
@@ -37,13 +34,13 @@ class Solution {
             currR = nextR;
         }
         
-        if(prevIt != null)
-            prevIt.next = prevR;
-        else
+        if(prevIt == null)
             head = prevR;
+        else
+            prevIt.next = prevR;
         
         it.next = currR;
         
-        return dummy.next;
+        return head;
     }
 }
