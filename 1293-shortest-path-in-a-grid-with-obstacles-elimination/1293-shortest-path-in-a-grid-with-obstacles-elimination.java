@@ -1,5 +1,7 @@
 class Solution {
     
+    // based on 1 src 1 dest type bfs
+    
     class Node{
         int i;
         int j;
