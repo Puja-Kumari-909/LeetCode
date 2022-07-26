@@ -1,5 +1,7 @@
 class Solution {
     
+    // start with all the rotten oranges as root and keep making all adj oranges rotten until no further oranges can be traversed from the rotten once
+    
     class Pair{
         int i;
         int j;
