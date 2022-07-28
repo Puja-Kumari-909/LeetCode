@@ -4,15 +4,13 @@ class Solution {
         int node;
         int distance;
         
-        public Pair(int n, int d){
+        Pair(int n, int d){
             node = n;
             distance = d;
         }
     }
     
-    public int networkDelayTime(int[][] edges, int n, int src) {
-        
-        // Create adj list
+    public int networkDelayTime(int[][] edges, int n, int k) {
         
         Map<Integer, List<Pair>> adj = new HashMap<>();
         
@@ -30,7 +28,7 @@ class Solution {
         Arrays.fill(distance, Integer.MAX_VALUE);
         distance[0] = -1;
         
-        dijkstraUsingPriorityQueue(adj, n, src, vis, distance); 
+        dij(adj, n, k, vis, distance);
         
         int time = 0;
         
@@ -44,28 +42,27 @@ class Solution {
         return time;
     }
     
-    
-    private void dijkstraUsingPriorityQueue(Map<Integer, List<Pair>> adj, int n, int source, boolean[] vis, int[] distance){
+    public void dij(Map<Integer, List<Pair>> adj, int n, int src, boolean[] vis, int[] distance){
         
         PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> a.distance - b.distance);
         
-        distance[source] = 0;
-        pq.add(new Pair(source, 0));
+        distance[src] = 0;
+        pq.add(new Pair(src, 0));
         
-        int visitedNodes = 0;
+        int nodesProcessed = 0;
         
-        while(!pq.isEmpty() && visitedNodes <= n){
+        while(!pq.isEmpty() && nodesProcessed<=n){
             Pair pair = pq.poll();
             int currNode = pair.node;
-            int dis = pair.distance;
+            int currDistance = pair.distance;
             
             if(vis[currNode]) continue;
             vis[currNode] = true;
-            visitedNodes++;
+            nodesProcessed++;
             
             for(Pair adjNode : adj.get(currNode)){
-                if(dis + adjNode.distance < distance[adjNode.node]){   //relaxation
-                    distance[adjNode.node] = dis + adjNode.distance;
+                if(currDistance + adjNode.distance < distance[adjNode.node]){
+                    distance[adjNode.node] = currDistance + adjNode.distance;
                     pq.add(new Pair(adjNode.node, distance[adjNode.node]));
                 }
             }
