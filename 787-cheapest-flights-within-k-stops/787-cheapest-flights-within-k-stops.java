@@ -1,5 +1,7 @@
 class Solution {
     
+    // use simple bfs with some modification of type 0-1 graph solution
+    
     class Pair{
         int node;
         int weight;
@@ -40,7 +42,7 @@ class Solution {
                 int weight = currPair.weight;
                 
                 for(Pair adjNode : adj.get(node)){
-                    if(weight + adjNode.weight < dis[adjNode.node]){
+                    if(weight + adjNode.weight < dis[adjNode.node]){    //relaxation
                         dis[adjNode.node] = weight + adjNode.weight;
                         q.add(new Pair(adjNode.node,dis[adjNode.node]));
                     }
