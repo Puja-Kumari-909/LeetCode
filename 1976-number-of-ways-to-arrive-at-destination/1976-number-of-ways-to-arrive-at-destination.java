@@ -51,11 +51,23 @@ class Solution {
                 int adjNodeData = adjNode.node;
                 int adjNodeDistance = adjNode.distance;
                 
+                /* this means that we've found a better(less time consuming) 
+				way to reach adjNode, now this better way will prevail and 
+				we now don't care about past ways therefore total number 
+				of ways to reach adjNode is simply equal to the total number of ways 
+				to reach its parent which is currNode */
+                
                 if(currDistance + adjNodeDistance < distance[adjNodeData]){
                     distance[adjNodeData] = currDistance + adjNodeDistance;
                     ways[adjNodeData] = ways[currData];
                     pq.add(new Pair(adjNodeData, currDistance + adjNodeDistance));
                 }
+                
+                /* here we have a way to reach adjNode which is taking same amount 
+				of time	as the optimal path but this time parent of adjNode 
+				is different therefore we ways to reach currNode to current ways 
+				of reaching adjNode */
+                
                 else if(currDistance + adjNodeDistance == distance[adjNodeData]){
                     ways[adjNodeData] =  (ways[adjNodeData] + ways[currData]) % MOD;
                 }
