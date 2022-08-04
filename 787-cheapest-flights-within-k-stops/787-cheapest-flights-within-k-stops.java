@@ -1,7 +1,5 @@
 class Solution {
     
-    // use simple bfs with some modification of type 0-1 graph solution
-    
     class Pair{
         int node;
         int weight;
@@ -24,41 +22,43 @@ class Solution {
             adj.get(flight[0]).add(new Pair(flight[1], flight[2]));
         }
         
-        int[] dis = new int[n];
-        Arrays.fill(dis, Integer.MAX_VALUE);
+        int[] price = new int[n];
+        Arrays.fill(price, Integer.MAX_VALUE);
         
         Queue<Pair> q = new LinkedList<>();
-        q.add(new Pair(src, 0));
-        dis[src] = 0;
         
+        q.add(new Pair(src, 0));
         int level = 0;
         
-        while(!q.isEmpty() && level<k+1){
+        while(!q.isEmpty() && level<=k){
             int size = q.size();
             
             while(size-- > 0){
-                Pair currPair = q.poll();
-                int node = currPair.node;
-                int weight = currPair.weight;
+                Pair temp = q.poll();
+                int node = temp.node;
+                int cost = temp.weight;
                 
                 for(Pair adjNode : adj.get(node)){
-                    if(weight + adjNode.weight < dis[adjNode.node]){    //relaxation
-                        dis[adjNode.node] = weight + adjNode.weight;
-                        q.add(new Pair(adjNode.node,dis[adjNode.node]));
+                    int adjNodeValue = adjNode.node;
+                    int adjNodePrice = adjNode.weight;
+                    
+                    if(cost + adjNodePrice < price[adjNodeValue]){
+                        price[adjNodeValue] = cost + adjNodePrice;
+                        q.add(new Pair(adjNodeValue, cost + adjNodePrice));
                     }
                 }
             }
             level++;
         }
         
-        int cheapestPrice = 0;
+        int cheapestPrice = -1;
         
-        for(int i=0; i<dis.length; i++){
-            if(i == dst && dis[i] != Integer.MAX_VALUE){
-                return dis[i];
+        for(int i=0; i<price.length; i++){
+            if(i==dst && price[i] != Integer.MAX_VALUE){
+                cheapestPrice = price[i];
             }
         }
         
-        return -1;
+        return cheapestPrice;
     }
 }
