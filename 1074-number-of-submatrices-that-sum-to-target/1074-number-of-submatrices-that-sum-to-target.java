@@ -1,39 +1,42 @@
 class Solution {
-    public int numSubmatrixSumTarget(int[][] mat, int target) {
-        int n = mat.length;
-        int m = mat[0].length;
+    public int numSubmatrixSumTarget(int[][] matrix, int target) {
         
-        if(n==0) return 0;
+        int n = matrix.length;
+        int m = matrix[0].length;
+        
+        int sum = 0;
         
         for(int i=0; i<n; i++){
-            for(int j=1; j<m; j++){
-                mat[i][j] += mat[i][j-1]; 
+            for(int j=0; j<m; j++){
+                sum += matrix[i][j];
+                matrix[i][j] = sum;
             }
+            sum = 0;
         }
         
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> hmap = new HashMap<>();
         
         int count = 0;
         
         for(int startCol=0; startCol<m; startCol++){
             for(int endCol=startCol; endCol<m; endCol++){
-                map.clear();
-                map.put(0, 1);
+                hmap.clear();
+                hmap.put(0, 1);
+                
                 int subMatSum = 0;
                 
                 for(int row=0; row<n; row++){
-                    subMatSum += mat[row][endCol] - (startCol>0 ? mat[row][startCol-1] : 0);
+                    subMatSum += matrix[row][endCol] - (startCol==0 ? 0 : matrix[row][startCol-1]);
                     
-                    if(map.containsKey(subMatSum - target)){
-                        int val = map.get(subMatSum-target);
-                        count += val; 
+                    if(hmap.containsKey(subMatSum - target)){
+                        int val = hmap.get(subMatSum - target);
+                        count += val;
                     }
                     
-                    map.put(subMatSum, map.getOrDefault(subMatSum, 0) + 1);
+                    hmap.put(subMatSum, hmap.getOrDefault(subMatSum, 0) + 1);
                 }
             }
         }
-        
         return count;
     }
 }
