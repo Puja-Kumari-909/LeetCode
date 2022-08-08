@@ -1,32 +1,26 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
         
-        int[][] dp = new int[nums.length][nums.length+1];
-        
-        for(int[] arr : dp){
-            Arrays.fill(arr, -1);
+        for(int i=0; i<nums.length; i++){
+            dp[i] = 1;
         }
         
-        return helper(nums, 0, -1, dp);
-    }
-    
-    public int helper(int[] nums, int ind, int prev_ind, int[][] dp){
-        
-        if(ind>=nums.length){
-            return 0;
+        for(int i=1; i<nums.length; i++){
+            for(int j=i-1; j>=0; j--){
+                if(nums[i]>nums[j]){
+                    int lengthOfLis = dp[j] + 1;
+                    dp[i] = Math.max(dp[i], lengthOfLis);
+                }
+            }
         }
         
-        if(dp[ind][prev_ind+1] != -1) return dp[ind][prev_ind+1];
+        int maxLengthLis = dp[0];
         
-        int pick = 0;
-        int notPick = 0;
-        
-        notPick = 0 + helper(nums, ind+1, prev_ind, dp);
-        
-        if(prev_ind == -1 || nums[prev_ind]<nums[ind]){
-            pick = 1 + helper(nums, ind+1, ind, dp);
+        for(int num : dp){
+            maxLengthLis = Math.max(num, maxLengthLis);
         }
         
-        return dp[ind][prev_ind+1] = Math.max(notPick, pick);
+        return maxLengthLis;
     }
 }
