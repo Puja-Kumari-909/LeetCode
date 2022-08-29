@@ -8,6 +8,11 @@
  * }
  */
 class Solution {
+    
+    // Similar to burn tree concept. Use BFS to traverse till k nodes
+    // its easy to go left and right but to go to parent node we need to make those connection
+    // for this we can use map to store the info of the parent of the current node
+    
     public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
         List<Integer> ans = new ArrayList<>();
         
