@@ -16,7 +16,7 @@
 class Solution {
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         
-        List<List<Integer>> ans = new LinkedList<>();
+        List<List<Integer>> ans = new ArrayList<>();
         
         if(root == null) return ans;
         
