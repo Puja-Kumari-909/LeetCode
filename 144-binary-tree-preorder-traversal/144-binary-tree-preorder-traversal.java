@@ -30,6 +30,8 @@ class Solution {
             
             ans.add(curr.val);
             
+            // push right first bcz its a stack. LIFO
+            
             if(curr.right != null) st.push(curr.right);
             if(curr.left != null) st.push(curr.left);
             
