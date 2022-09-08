@@ -14,29 +14,37 @@
  * }
  */
 class Solution {
+    
+    // Iterative Inorder
+    
     public int getMinimumDifference(TreeNode root) {
         
-        int[] min = {Integer.MAX_VALUE};
+        int min = Integer.MAX_VALUE;
         
-        int[] prev = {-1};
+        Integer prev = null;
         
-        helper(root, min, prev);
+        Stack<TreeNode> st = new Stack<>();
         
-        return min[0];
-    }
-    
-    public void helper(TreeNode root, int[] min, int[] prev){
+        TreeNode curr = root;
         
-        if(root == null) return;
-        
-        helper(root.left, min, prev);
-        
-        if(prev[0] != -1){
-            min[0] = Math.min(min[0], Math.abs(root.val - prev[0]));
+        while(curr != null || !st.isEmpty()){
+            
+            while(curr != null){
+                st.push(curr);
+                curr = curr.left;
+            }
+            
+            curr = st.pop();
+            
+            if(prev != null){
+                min = Math.min(min, curr.val - prev);
+            }
+            
+            prev = curr.val;
+            
+            curr = curr.right;
         }
         
-        prev[0] = root.val;
-        
-        helper(root.right, min, prev);
+        return min;
     }
 }
