@@ -1,4 +1,9 @@
 class Solution {
+    
+    // How this problem is different from russion doll?
+    // Here the ans is not dependent on the chain of ans. here every ans is only depending on
+    // the last maximum value. and thats why greedy works.. 
+    
     public int numberOfWeakCharacters(int[][] properties) {
         
         int n = properties.length;
