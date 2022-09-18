@@ -1,29 +1,42 @@
 class Solution {
     public int trap(int[] height) {
-        
+
         int n = height.length;
         
-        int[] prefixMax = new int[n];
-        int[] suffixMax = new int[n];
+        if(n==1) return 0;
         
         int ans = 0;
         
-        prefixMax[0] = height[0];
-        for(int i=1; i<n; i++){
-            prefixMax[i] = Math.max(height[i], prefixMax[i-1]);
-        }
+        int l = 0;
+        int r = n-1;
+        int leftMax = 0;
+        int rightMax = 0;
         
-        suffixMax[n-1] = height[n-1];
-        for(int i=n-2; i>=0; i--){
-            suffixMax[i] = Math.max(height[i], suffixMax[i+1]);
-        }
-        
-        for(int i=0; i<n; i++){
+        while(l<=r){
             
-            int leftMax = prefixMax[i];
-            int rightMax = suffixMax[i];
+            // we know that there is something bigger on the right already so we can safily compute the left storage
+            if(height[l]<=height[r]){         
+                
+                if(height[l]>=leftMax){
+                    leftMax = height[l];
+                }
+                else{
+                    ans += leftMax - height[l];
+                }
+                l++;
+            }
             
-            ans += (Math.min(leftMax, rightMax)) - height[i];
+            // otherwise we know that something bigger is there on left so we then compute the right storage
+            else{
+                
+                if(height[r] >= rightMax){
+                    rightMax = height[r];
+                }
+                else{
+                    ans += rightMax - height[r];
+                }
+                r--;
+            }
         }
         
         return ans;
