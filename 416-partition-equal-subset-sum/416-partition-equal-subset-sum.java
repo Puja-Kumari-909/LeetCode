@@ -6,27 +6,28 @@ class Solution {
         
         if(totalSum % 2 != 0) return false;
         
-        Boolean[][] dp = new Boolean[n+1][totalSum+1];
-        
         int target = totalSum/2;
         
-        return helper(0, 0, target, nums, dp);
-    }
-    
-    private boolean helper(int ind, int sum, int target, int[] nums, Boolean[][] dp){
+        boolean[][] dp = new boolean[n+1][target+1];
         
-        if(ind >= nums.length){
-            if(sum == target) 
-                return true;
-            else 
-                return false;
+        dp[0][0] = true;
+        
+        for(int i=1; i<n; i++)
+            dp[i][0] = true;
+        
+        for(int j=1; j<=target; j++)
+            dp[0][j] = false;
+        
+        for(int ind = 1; ind<=n; ind++){
+            for(int tar = 1; tar<=target; tar++){
+                if(nums[ind-1] <= tar){
+                    dp[ind][tar] = dp[ind-1][tar] || dp[ind-1][tar - nums[ind-1]];
+                }else{
+                    dp[ind][tar] = dp[ind-1][tar];
+                }
+            }
         }
         
-        if(dp[ind][sum] != null) return dp[ind][sum];
-        
-        boolean take = helper(ind+1, sum + nums[ind], target, nums, dp);
-        boolean dontTake = helper(ind+1, sum, target, nums, dp);
-        
-        return dp[ind][sum] = take || dontTake;
+        return dp[n][target];
     }
 }
