@@ -1,30 +1,26 @@
 class Solution {
     public int numDecodings(String s) {
         
-        int[] dp = new int[s.length()];
+        int n = s.length();
         
-        Arrays.fill(dp, -1);
+        int[] dp = new int[s.length()+1];
         
-        return helper(0, s, dp);
-    }
-    
-    private int helper(int ind, String s, int[] dp){
+        dp[n] = 1;
         
-        if(ind == s.length())
-            return 1;
+        for(int i=n-1; i>=0; i--){
+            if(s.charAt(i) != '0'){
+                
+                int takeOne = dp[i+1];
         
-        if(s.charAt(ind) == '0')
-            return 0;
+                int takeTwo = 0;
+
+                if(i<n-1 && (s.charAt(i) == '1' || (s.charAt(i) == '2' && s.charAt(i+1) < '7')))
+                    takeTwo = dp[i+2];
+
+                dp[i] = takeOne + takeTwo;
+            }
+        }
         
-        if(dp[ind] != -1) return dp[ind];
-        
-        int takeOne = helper(ind+1, s, dp);
-        
-        int takeTwo = 0;
-        
-        if(ind<s.length()-1 && (s.charAt(ind) == '1' || (s.charAt(ind) == '2' && s.charAt(ind+1) < '7')))
-            takeTwo = helper(ind+2, s, dp);
-        
-        return dp[ind] = takeOne + takeTwo;
+        return dp[0];
     }
 }
