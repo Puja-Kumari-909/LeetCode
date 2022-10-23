@@ -1,35 +1,44 @@
 class Solution {
     public boolean checkInclusion(String s1, String s2) {
         
-        if(s2.length() < s1.length())
-            return false;
+        if(s2.length() < s1.length()) return false;
         
-        int[] map1 = new int[26];
-        int[] map2 = new int[26];
+        int[] s1map = new int[26];
+        int[] s2map = new int[26];
         
-        for(int i=0; i<s1.length(); i++){
-            map1[s1.charAt(i) - 'a']++;
-            map2[s2.charAt(i) - 'a']++;
+        for(char ch : s1.toCharArray()){
+            s1map[ch - 'a']++;
+        } 
+        
+        int left = 0;
+        int right = 0;
+        
+        while(right < s2.length()){
+            
+            s2map[s2.charAt(right) - 'a']++;
+            
+            if(right-left+1 == s1.length())
+                if(isMatched(s1map, s2map))
+                    return true;
+            
+            if(right-left+1 < s1.length())
+                right++;
+            else{
+                s2map[s2.charAt(left) - 'a']--;
+                left++;
+                right++;
+            }
         }
         
-        for(int i=0; i<s2.length()-s1.length(); i++){
-            
-            if(isMatched(map1, map2))
-                return true;
-            
-            map2[s2.charAt(i + s1.length()) - 'a']++;
-            map2[s2.charAt(i) - 'a']--;
-        }
-        
-        return isMatched(map1, map2);
+        return false;
     }
     
-    public boolean isMatched(int[] map1, int[] map2){
-        for(int i=0; i<26; i++){
-            if(map1[i] != map2[i])
+    public boolean isMatched(int[] m1, int[] m2){
+        
+        for(int i=0; i<m1.length; i++){
+            if(m1[i]!=m2[i])
                 return false;
         }
-        
         return true;
     }
 }
