@@ -1,4 +1,7 @@
 class Solution {
+    
+    // Sliding Window with a bit of maths. Try to find the formula to get the valid window
+    
     public int maxFrequency(int[] nums, int k) {
         
         Arrays.sort(nums);
