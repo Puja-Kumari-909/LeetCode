@@ -36,26 +36,20 @@ class Solution {
         
         Arrays.sort(arr);
         
-        int[][] dp = new int[n][n];
+        int i=0;
+        int j=0;
         
-        for(int[] row : dp)
-            Arrays.fill(row, -1);
+        int maxWindowSize = 0;
+        while(j<n){
             
-        return helper(0, arr.length-1, k, arr, dp);
-    }
-    
-    int helper(int i, int j, int k, int[] arr, int[][] dp){
-        if(i>=j)
-            return 0;
+            if(arr[j] - arr[i] <= k)
+                j++;
+            else if(i<j)
+                i++;
             
-        if(arr[j] - arr[i] <= k)
-            return 0;
+             maxWindowSize = Math.max(maxWindowSize, j-i);
+        }
         
-        if(dp[i][j] != -1) return dp[i][j];
-        
-        int removeLeft = helper(i+1, j, k, arr, dp);
-        int removeRight = helper(i, j-1, k, arr, dp);
-        
-        return dp[i][j] = 1 + Math.min(removeLeft, removeRight);
+        return n-maxWindowSize;
     }
 }
