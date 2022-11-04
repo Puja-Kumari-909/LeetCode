@@ -1,29 +1,29 @@
 class Solution {
     public String reverseVowels(String s) {
         
-        StringBuilder rev = new StringBuilder();
+        if(s == null || s.length()==0) return s;
+        String vowels = "aeiouAEIOU";
+        char[] chars = s.toCharArray();
+        int start = 0;
+        int end = s.length()-1;
         
-        for(char c : s.toCharArray())
-        {
-            if(c=='a' || c=='e' || c=='i' || c=='o' || c=='u' || c=='A' || c=='E' || c=='I' || c=='O' || c=='U')
-            {
-                rev.append(c);
+        while(start<end){
+
+            while(start<end && !vowels.contains(chars[start]+"")){
+                start++;
             }
+
+            while(start<end && !vowels.contains(chars[end]+"")){
+                end--;
+            }
+
+            char temp = chars[start];
+            chars[start] = chars[end];
+            chars[end] = temp;
+
+            start++;
+            end--;
         }
-        
-        rev.reverse();
-        int ind = 0;
-        
-        StringBuilder ans = new StringBuilder();
-        
-        for(char c : s.toCharArray())
-        {
-            if(c!='a' && c!='e' && c!='i' && c!='o' && c!='u' && c!='A' && c!='E' && c!='I' && c!='O' && c!='U')
-                ans.append(c);
-            else
-                ans.append(rev.charAt(ind++));
-        }
-        
-        return ans.toString();
+        return new String(chars);
     }
 }
