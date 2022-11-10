@@ -39,36 +39,32 @@ class Solution
 {
     public boolean isBipartite(int V, ArrayList<ArrayList<Integer>>adj)
     {
-        int[] color = new int[V];  
+        int[] color = new int[V];
+        
         Arrays.fill(color, -1);
         
         for(int i=0; i<V; i++){
             if(color[i]==-1){
-                if(!check(i, V, adj, color))
+                if(check(i, 0, adj, color)==false){
                     return false;
+                }
             }
         }
+        
         return true;
     }
     
-    private boolean check(int node, int V, ArrayList<ArrayList<Integer>>adj, int[] color){
+    private boolean check(int node, int col, ArrayList<ArrayList<Integer>>adj, int[] color){
         
-        Queue<Integer> q = new LinkedList<>();
+        color[node] = col;
         
-        q.add(node);
-        color[node] = 0;
-        
-        while(!q.isEmpty()){
-            int curr = q.poll();
-            
-            for(int adjNode : adj.get(curr)){
-                if(color[adjNode]==-1){
-                    color[adjNode] = 1 - color[curr];
-                    q.add(adjNode);
-                }
-                else if(color[adjNode]==color[curr])
+        for(int adjNode : adj.get(node)){
+            if(color[adjNode]==-1){
+                if(check(adjNode, 1 - col, adj, color)==false)
                     return false;
             }
+            else if(color[adjNode]==color[node])
+                return false;
         }
         
         return true;
