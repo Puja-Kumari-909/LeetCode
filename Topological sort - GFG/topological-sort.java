@@ -65,32 +65,37 @@ class Solution
     {
         int[] ans = new int[V];
         
-        Stack<Integer> st = new Stack<>();
-        boolean[] visited = new boolean[V];
+        int[] inDegree = new int[V];
+        
+        Queue<Integer> q = new LinkedList<>();
         
         for(int i=0; i<V; i++){
-            if(!visited[i]){
-                dfs(i, st, visited, adj);
+            for(int node : adj.get(i)){
+                inDegree[node]++;
             }
+        }
+        
+        for(int i=0; i<V; i++){
+            if(inDegree[i]==0)
+                q.add(i);
         }
         
         int ind = 0;
-        while(!st.isEmpty()){
-            ans[ind++] = st.pop();
+    
+        while(!q.isEmpty()){
+                int curr = q.poll();
+                
+                ans[ind++] = curr;
+                
+                for(int adjNode : adj.get(curr))
+                {
+                    inDegree[adjNode]--;
+                    if(inDegree[adjNode]==0)
+                        q.add(adjNode);
+                }
+            
         }
         
         return ans;
-    }
-    
-    static void dfs(int currNode, Stack<Integer> st, boolean[] visited, ArrayList<ArrayList<Integer>> adj){
-        visited[currNode] = true;
-        
-        for(int adjNode : adj.get(currNode)){
-            if(!visited[adjNode]){
-                dfs(adjNode, st, visited, adj);
-            }
-        }
-        
-        st.push(currNode);
     }
 }
