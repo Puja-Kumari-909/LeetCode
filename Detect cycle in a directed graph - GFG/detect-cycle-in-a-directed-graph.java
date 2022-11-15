@@ -35,35 +35,36 @@ class Solution {
     // Function to detect cycle in a directed graph.
     public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
         
-        boolean[] visited = new boolean[V];
-        boolean[] pathVisited = new boolean[V];
+        int[] inDegree = new int[V];
+        
+        int count = 0;
         
         for(int i=0; i<V; i++){
-            if(!visited[i]){
-                if(dfs(i, visited, pathVisited, adj))
-                    return true;
+            for(int adjNode : adj.get(i))
+                inDegree[adjNode]++;
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        
+        for(int i=0; i<V; i++){
+            if(inDegree[i]==0)
+                q.add(i);
+        }
+        
+        while(!q.isEmpty()){
+            
+            int curr = q.poll();
+            count++;
+            
+            for(int adjNode : adj.get(curr)){
+                inDegree[adjNode]--;
+                if(inDegree[adjNode]==0)
+                    q.add(adjNode);
             }
         }
         
-        return false;
-    }
-    
-    public boolean dfs(int currNode, boolean[] vis, boolean[] pathVis, ArrayList<ArrayList<Integer>> adj){
+        if(count == V) return false;
         
-        vis[currNode] = true;
-        pathVis[currNode] = true;
-
-        for(int adjNode : adj.get(currNode)){
-            if(!vis[adjNode]){
-                if(dfs(adjNode, vis, pathVis, adj))
-                    return true;
-            }
-            else if(pathVis[adjNode]== true)
-                return true;
-        }
-        
-        pathVis[currNode] = false;
-        
-        return false;
+        return true;
     }
 }
