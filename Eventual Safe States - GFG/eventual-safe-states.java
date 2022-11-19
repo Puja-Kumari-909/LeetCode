@@ -42,47 +42,48 @@ class GFG {
 // User function Template for Java
 
 class Solution {
+    
+    // Reverse the links and backtrack from the terminal nodes to all the nodes using topo sort
 
     List<Integer> eventualSafeNodes(int V, List<List<Integer>> adj) {
+
+        List<List<Integer>> adjRev = new ArrayList<>();
         
-        boolean[] vis = new boolean[V];
-        boolean[] pathVis = new boolean[V];
-        int[] check = new int[V];
+        int[] inDeg = new int[V];
         
         for(int i=0; i<V; i++){
-            if(!vis[i])
-                dfs(i, vis, pathVis, check, adj);
+            adjRev.add(new ArrayList<>());
+        }
+        
+        for(int i=0; i<V; i++){
+            for(int it : adj.get(i)){
+                adjRev.get(it).add(i);
+                inDeg[i]++;
+            }
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        
+        for(int i=0; i<V; i++){
+            if(inDeg[i]==0)
+                q.add(i);
         }
         
         List<Integer> ans = new ArrayList<>();
         
-        for(int i=0; i<V; i++){
-            if(check[i]==1)
-                ans.add(i);
+        while(!q.isEmpty()){
+            int curr = q.poll();
+            
+            ans.add(curr);
+            
+            for(int adjNode : adjRev.get(curr)){
+                if(--inDeg[adjNode]==0)
+                    q.add(adjNode);
+            }
         }
+        
+        Collections.sort(ans);
         
         return ans;
-    }
-    
-    boolean dfs(int currNode, boolean[] vis, boolean[] pathVis, int[] check,List<List<Integer>> adj){
-        vis[currNode] = true;
-        pathVis[currNode] = true;
-        check[currNode] = 0;
-        for(int adjNode : adj.get(currNode)){
-            if(!vis[adjNode]){
-                if(dfs(adjNode, vis, pathVis, check, adj)){
-                    check[adjNode] = 0;
-                    return true;
-                }
-            }
-            else if(pathVis[adjNode]){
-                check[adjNode] = 0;
-                return true;
-            }
-        }
-        
-        check[currNode] = 1;
-        pathVis[currNode] = false;
-        return false;
     }
 }
