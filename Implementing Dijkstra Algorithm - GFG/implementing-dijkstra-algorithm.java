@@ -55,50 +55,45 @@ class DriverClass
 //User function Template for Java
 
 
-    class Solution
+class Solution
+{
+    static class Pair{
+        int node, distance;
+        
+        Pair(int n, int d){
+            node = n;
+            distance = d;
+        }
+    }
+    
+    static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S)
     {
-        static class Pair{
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> a.distance-b.distance);
+        
+        int[] dist = new int[V];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        
+        pq.add(new Pair(S, 0));
+        dist[S] = 0;
+        
+        while(!pq.isEmpty()){
+            Pair curr = pq.poll();
             
-            int node;
-            int distance;
+            int currNode = curr.node;
+            int currDist = curr.distance;
             
-            Pair(int n, int d){
-                node = n;
-                distance = d;
+            for(ArrayList<Integer> it : adj.get(currNode)){
+                int adjNode = it.get(0);
+                int adjDist = it.get(1);
+                
+                if(adjDist+currDist < dist[adjNode]){
+                    dist[adjNode] = adjDist+currDist;
+                    pq.add(new Pair(adjNode, adjDist+currDist));
+                }  
             }
         }
         
-        //Function to find the shortest distance of all the vertices
-        //from the source vertex S.
-        static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S)
-        {
-            int[] distanceArr = new int[V];
-            
-            for(int i=0; i<distanceArr.length; i++)
-                distanceArr[i] = Integer.MAX_VALUE;
-                
-            distanceArr[S] = 0;
-            
-            PriorityQueue<Pair> pq = new PriorityQueue<>((a,b) -> a.distance-b.distance);
-                
-            pq.add(new Pair(S, 0));
-            
-            while(!pq.isEmpty()){
-                Pair curr = pq.poll();
-                int dist = curr.distance;
-                int val = curr.node;
-                
-                for(ArrayList<Integer> pair : adj.get(val)){
-                    int edgeWeight = pair.get(1);
-                    int adjNode = pair.get(0);
-                    
-                    if(dist+edgeWeight < distanceArr[adjNode]){
-                        distanceArr[adjNode] = dist+edgeWeight;
-                        pq.add(new Pair(adjNode, dist+edgeWeight));
-                    }
-                }
-            }
-            
-            return distanceArr;
-        }
+        return dist;
     }
+}
+
