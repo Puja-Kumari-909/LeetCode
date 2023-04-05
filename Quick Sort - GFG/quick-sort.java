@@ -36,35 +36,36 @@ class Solution
     //Function to sort an array using quick sort algorithm.
     static void quickSort(int arr[], int low, int high)
     {
-        if(low<high){
-            int partionIndex = partition(arr, low, high);
-            quickSort(arr, low, partionIndex-1);
-            quickSort(arr, partionIndex+1, high);
-        }
+        if(low >= high)
+            return;
+        
+        int pivotIndex = partition(arr, low, high);
+        quickSort(arr, low, pivotIndex-1);
+        quickSort(arr, pivotIndex+1, high);
     }
+    
     static int partition(int arr[], int low, int high)
     {
         int pivot = arr[low];
-        int i = low;
-        int j = high;
+        int left = low;
+        int right = high;
         
-        while(i<j){
-            while(arr[i]<=pivot && i < high){
-                i++;
+        while(left < right){
+            while(arr[left] <= pivot && left < high){
+                left++;
             }
             
-            while(arr[j]>pivot && j > low){
-                j--;
+            while(arr[right] > pivot && right > low){
+                right--;
             }
             
-            if(i < j){
-                swap(arr, i, j);
+            if(left < right){
+                swap(arr, left, right);
             }
         }
         
-        swap(arr, low, j);
-        
-        return j;
+        swap(arr, low, right);
+        return right;
     } 
     
     private static void swap(int[] arr, int i, int j){
